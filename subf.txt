@@ -1,0 +1,6 @@
+on08032017
+4c
+1cp code planning initialized for 'forcee' tool
+cc First lines. The core of key logic function. Also the chains.
+; just testing this format - this is a comment till end of line
+; now we should already be able to get a Summary

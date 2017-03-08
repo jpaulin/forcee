@@ -1,4 +1,3 @@
-
 // FORCEE
 // Keeps track of time and items in projects
 //
@@ -44,7 +43,7 @@
 //
 //
 
-var _ = require('lodash')
+// var _ = require('lodash')
 
 // The key buffer holding a sequence of keys. These are coming from user
 var keybuf = []
@@ -103,7 +102,21 @@ function keyLogic (newKey) {
   decider(keybuf)
 }
 
-// Raw and dirty testing of FORCEE so far. 
+/*
+ * Returns the length of the given worklog
+ */
+function parseLog (aWorkLog) {
+  if (!aWorkLog) return 0
+  return aWorkLog.length
+}
+
+function testSummary (aWorkLog) {
+  for (var i = 0; i < aWorkLog.length; i++) {
+    console.log(aWorkLog[i])
+  }
+}
+
+// Raw and dirty testing of FORCEE so far.
 // Shove in some work entries. We'll do that directly into the worklog.
 worklog.push('on08032017')
 worklog.push('4c')
@@ -111,3 +124,7 @@ worklog.push('1cp code planning initialized for FORCEE tool')
 worklog.push('cc First lines. The core of key logic function. Also the chains.')
 worklog.push('; just testing this format - this is a comment till end of line')
 worklog.push('; now we should already be able to get a Summary')
+
+testSummary(worklog)
+console.log('Work log length as per items:')
+console.log(parseLog(worklog))

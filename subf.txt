@@ -1,6 +1,10 @@
+; Conforms to per-standardized format used by early versions of Forcee
 on08032017
 4c
 1cp code planning initialized for 'forcee' tool
 cc First lines. The core of key logic function. Also the chains.
 ; just testing this format - this is a comment till end of line
 ; now we should already be able to get a Summary
+on09032017
+cc Added keypress handling with 'keypress' package
+cd Feature planning, initiated 'feats.md' file

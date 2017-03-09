@@ -15,7 +15,8 @@
 //
 // Keyboard logic: 2 or 3 keypresses logs a new entry
 //
-// 4 c  => Four cups of coffee in office
+// 4 f  => Four cups of coffee in office
+// 1 s  => An hour of Sauna (also s 1 or just s [enter])
 // c c  => Code, creation (writing payload code for the game)
 // c d  => Code documentation
 // c t  => Code tests (unit tests, e2e, ...)
@@ -41,23 +42,49 @@
 //
 // Three-character commands
 //
-//
+// Format of worklog
+// 1. rule: The Comment lines
+//    - line MUST begin with a '#'. No whitespace before this. All else is comment
 
-// var _ = require('lodash')
+// Library inclusions
+var _ = require('lodash')
+var kbd = require('keypress')
+
+// -----------------------------------------
+// + Configuration of the data file format +
+// -----------------------------------------
+var COMMENTSCHAR = '#'
 
 // The key buffer holding a sequence of keys. These are coming from user
 var keybuf = []
 
+// A counter (increments) that shows how many keypresses user has done
+var selfDestruct
+
 // The current "live" work log array. Contains all the log entries.
+// Normal, zero-based ie. worklog[0] shot first
 var worklog = []
 
 /*
  * Summarize a work log and produce a hours list by category.
+ * Returns an object that has keys:
+ *   comments
+ *   items
  */
 function doSummary (aWorkLog) {
-  for (var i = 0; i < aWorkLog.length; i++) {
-    console.log('new line: ' + aWorkLog[i])
+  var retObj = {
+    comments: 0,
+    items: 0
   }
+  for (var i = 0; i < aWorkLog.length; i++) {
+    var focus = aWorkLog[i]
+    if (focus[0] === COMMENTSCHAR) {
+      retObj.comments++
+    } else {
+      retObj.items++
+    }
+  }
+  return retObj
 }
 
 // Acceptable key commands, or 'chains', are defined here.
@@ -70,10 +97,15 @@ var acceptchains = [
 ]
 
 /*
-  Responsible for writing the log.
-  function writeWorkLog() {
-}
+  Responsible for writing the log. Overwrites any existing
+  files.
+  Returns:
+   true  - all ok, log written to file
+   false - file was not ok: permissions, or media error
 */
+function writeWorkLog() {
+  console.log('writeWorkLog not yet implemented.')
+}
 
 /*
  * Adds a corresponding log entry into the worklog.
@@ -88,18 +120,26 @@ function decider (action, actionDetails) {
 
 /*
  * Processes key presses in the program. Once a valid pattern is
- * found, adds or otherwise manipulates the worklog.
- * newKey - character case sensitive, or NULL to initialize
+ * found, adds an entry (or otherwise manipulates) the worklog.
+ * This is the callback function to 'keypress' package. Is set up
+ * in main code.
  */
-function keyLogic (newKey) {
+function keyLogic (ch, key) {
   var commandRecognized
-  // Initialize only upon request
-  if (!newKey) { keybuf = [] }
+  console.log('raw ch: ' + ch.valueOf)
+  // If a non-valid keypress, exit immediately
+  if (!key) { return }
   commandRecognized = false
-  while (!commandRecognized) {
-    commandRecognized = true
+  selfDestruct++
+  // Append the new key (in 'keypress' terms: key.name) to tail of buffer
+  keybuf.push(key.name)
+  // Write out result to console
+  for (var i = 0; i < keybuf.length; i++) {
+    console.log('[' + i + '] = ' + keybuf[i])
   }
-  decider(keybuf)
+  console.log('commandRecognized? ' + commandRecognized)
+  // Exit conditions: either ESC key , or too long lifetime
+  if (selfDestruct > 3) { process.exit(0) }
 }
 
 /*
@@ -110,21 +150,27 @@ function parseLog (aWorkLog) {
   return aWorkLog.length
 }
 
-function testSummary (aWorkLog) {
-  for (var i = 0; i < aWorkLog.length; i++) {
-    console.log(aWorkLog[i])
-  }
-}
+// Init timer. This prevents the key loop from working eternally.
+selfDestruct = 0
+
+// Initalize keypress on standard input. Now a callback function handles
+// keypresses. This black magic directly from 'keypress' package's manual
+kbd(process.stdin)
+process.stdin.on('keypress', keyLogic)
+process.stdin.setRawMode(true)
+process.stdin.resume()
 
 // Raw and dirty testing of FORCEE so far.
 // Shove in some work entries. We'll do that directly into the worklog.
-worklog.push('on08032017')
+// worklog.push('on08032017')
 worklog.push('4c')
 worklog.push('1cp code planning initialized for FORCEE tool')
 worklog.push('cc First lines. The core of key logic function. Also the chains.')
 worklog.push('; just testing this format - this is a comment till end of line')
 worklog.push('; now we should already be able to get a Summary')
 
-testSummary(worklog)
+doSummary(worklog)
 console.log('Work log length as per items:')
 console.log(parseLog(worklog))
+
+writeWorkLog()

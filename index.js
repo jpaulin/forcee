@@ -66,10 +66,21 @@ var selfDestruct
 var worklog = []
 
 /*
+ * Reads worklog from a file.
+ *   File format: UTF-8 encoding, one line per work entry
+ *   All lines that begin with ';' (or defined by COMMENTSCHAR in here)
+ *   will be ignored.
+ */
+function readWorklog (fileName) {
+  console.log('Fake: readWorklog done.')
+}
+
+/*
  * Summarize a work log and produce a hours list by category.
- * Returns an object that has keys:
+ * Returns an object that has 6 keys:
  *   comments
- *   items
+ *   clines
+ *   
  */
 function doSummary (aWorkLog) {
   var retObj = {
@@ -150,8 +161,40 @@ function parseLog (aWorkLog) {
   return aWorkLog.length
 }
 
+/*
+ * Accessors for the worklog
+ *
+ * These functions handle the worklog in a way that keeps it
+ * consistent.
+*/
+function wlAddEntry (workData) {
+  // The input can be a whole array, or a single string
+  if (_.isArray(workData)) {
+    _.forEach(workData, function (itm) {
+      worklog.push(itm)
+      console.log('Adding ' + itm)
+    })
+  } else {
+    // It's a single string
+    worklog.push(workData)
+    console.log('Adding ' + workData)
+  }
+  return worklog.length
+}
+
+
+
+// ----- MAIN STARTS HERE ------
+
+// Let's initialize the worklog from a file
+readWorklog()
+
 // Init timer. This prevents the key loop from working eternally.
 selfDestruct = 0
+
+// Testing: Let's add 5 entries to worklog
+wlAddEntry('4c')
+wlAddEntry(['a', 'b', 'c'])
 
 // Initalize keypress on standard input. Now a callback function handles
 // keypresses. This black magic directly from 'keypress' package's manual
@@ -160,17 +203,7 @@ process.stdin.on('keypress', keyLogic)
 process.stdin.setRawMode(true)
 process.stdin.resume()
 
-// Raw and dirty testing of FORCEE so far.
-// Shove in some work entries. We'll do that directly into the worklog.
-// worklog.push('on08032017')
-worklog.push('4c')
-worklog.push('1cp code planning initialized for FORCEE tool')
-worklog.push('cc First lines. The core of key logic function. Also the chains.')
-worklog.push('; just testing this format - this is a comment till end of line')
-worklog.push('; now we should already be able to get a Summary')
-
 doSummary(worklog)
-console.log('Work log length as per items:')
-console.log(parseLog(worklog))
 
+// Calling the write, then we are done
 writeWorkLog()

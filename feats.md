@@ -3,6 +3,26 @@
 Forcee ('foresee') is - so far - a no-BS time tracking tool.
 The basic use is Single user, one project.
 
+#Basic usage
+
+Start
+
+##Keyboard shortcuts
+
+Forcee is completely driven by keyboard. There is just one "mode".
+Remember: if you feel uncomfortable, hit <ESC> key to exit Forcee.
+
+When you start typing, the sequence of keys is constantly checked
+whether it makes sense. Ie shortest sensible code wins.
+
+Some categories of entries have details, which are the second letter you type.
+
+Example:
+
+c	add Code entry
+f	add Coffee-brewing entry
+s	add a Sauna entry (default 1 hour)
+
 ###Terminology in Forcee
 
 Term | Explanation
@@ -54,7 +74,7 @@ v    = clone Verbatim (take the entry AS-IS and accept immediately)
 - requires an edit buffer, where user can further amend the entry before accepting
 
 Sauna 's' added for Forcee project manager. Essentials of the dev cycle. Testing it!
-Forcee currently has four keys: Code, Refactor, Tests, coFfee 
+Forcee currently has four keys: Code, Refactor, Tests, coFfee
 s 1 [enter] #BeBackLater
 
 #Links

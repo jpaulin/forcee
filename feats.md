@@ -1,11 +1,17 @@
 #FORCEE features document
 
-Terminology
+Forcee ('foresee') is - so far - a no-BS time tracking tool.
+The basic use is Single user, one project.
 
-accept	- confirm a worklog entry (usually with Enter key)
-session - the time between starting and exiting Forcee
-tag	- select an entry with Space or 'x' (also called Marking)
-Exit	- quit the Forcee program and save any work done
+###Terminology in Forcee
+
+Term | Explanation
+-----|------------
+accept | confirm a worklog entry (usually with Enter key)
+session | the time between starting and exiting Forcee
+tag | select an entry with Space or 'x' (also called Marking)
+Exit | quit the Forcee program and save any work done
+entry | a worklog entry, showing one stage of work. Example: '1 c' = 1 hour of code
 
 ##Design philosophy
 
